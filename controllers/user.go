@@ -16,7 +16,7 @@ import (
 // @Security ApiKeyAuth
 // @Success 200 {object} utils.Response
 // @Failure 401 {object} utils.Response
-// @Router /users/profile [get]
+// @Router /api/users/profile [get]
 func GetUserProfile(c *gin.Context) {
 	userID := c.GetUint("user_id")
 
@@ -46,7 +46,7 @@ type UpdateProfileRequest struct {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 401 {object} utils.Response
-// @Router /users/profile [put]
+// @Router /api/users/profile [put]
 func UpdateUserProfile(c *gin.Context) {
 	userID := c.GetUint("user_id")
 

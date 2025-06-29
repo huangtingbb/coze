@@ -1,4 +1,4 @@
-basePath: /api/v1
+basePath: /
 definitions:
   controllers.AuthResponse:
     properties:
@@ -130,7 +130,7 @@ info:
   title: Coze Agent Platform API
   version: "1.0"
 paths:
-  /agents:
+  /api/agents:
     get:
       consumes:
       - application/json
@@ -193,7 +193,7 @@ paths:
       summary: 创建Agent
       tags:
       - Agent
-  /agents/{id}:
+  /api/agents/{id}:
     delete:
       consumes:
       - application/json
@@ -290,7 +290,7 @@ paths:
       summary: 更新Agent
       tags:
       - Agent
-  /auth/login:
+  /api/auth/login:
     post:
       consumes:
       - application/json
@@ -325,7 +325,7 @@ paths:
       summary: 用户登录
       tags:
       - 认证
-  /auth/register:
+  /api/auth/register:
     post:
       consumes:
       - application/json
@@ -356,7 +356,7 @@ paths:
       summary: 用户注册
       tags:
       - 认证
-  /conversations:
+  /api/conversations:
     get:
       consumes:
       - application/json
@@ -419,7 +419,7 @@ paths:
       summary: 创建对话
       tags:
       - 对话
-  /conversations/{id}:
+  /api/conversations/{id}:
     delete:
       consumes:
       - application/json
@@ -480,7 +480,7 @@ paths:
       summary: 获取对话详情
       tags:
       - 对话
-  /conversations/{id}/messages:
+  /api/conversations/{id}/messages:
     get:
       consumes:
       - application/json
@@ -557,7 +557,7 @@ paths:
       summary: 发送消息
       tags:
       - 消息
-  /coze/token:
+  /api/coze/token:
     get:
       consumes:
       - application/json
@@ -576,7 +576,7 @@ paths:
       summary: 获取Coze访问令牌
       tags:
       - Coze
-  /users/profile:
+  /api/users/profile:
     get:
       consumes:
       - application/json

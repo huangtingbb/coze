@@ -26,32 +26,32 @@ Server starting on port :8080
 ## 📖 API 文档概览
 
 ### 认证相关 (Authentication)
-- `POST /api/v1/auth/login` - 用户登录
-- `POST /api/v1/auth/register` - 用户注册
+- `POST /api/auth/login` - 用户登录
+- `POST /api/auth/register` - 用户注册
 
 ### 用户管理 (Users)
-- `GET /api/v1/users/profile` - 获取用户资料
-- `PUT /api/v1/users/profile` - 更新用户资料
+- `GET /api/users/profile` - 获取用户资料
+- `PUT /api/users/profile` - 更新用户资料
 
 ### Agent 管理 (Agents)
-- `GET /api/v1/agents` - 获取 Agent 列表
-- `POST /api/v1/agents` - 创建 Agent
-- `GET /api/v1/agents/{id}` - 获取 Agent 详情
-- `PUT /api/v1/agents/{id}` - 更新 Agent
-- `DELETE /api/v1/agents/{id}` - 删除 Agent
+- `GET /api/agents` - 获取 Agent 列表
+- `POST /api/agents` - 创建 Agent
+- `GET /api/agents/{id}` - 获取 Agent 详情
+- `PUT /api/agents/{id}` - 更新 Agent
+- `DELETE /api/agents/{id}` - 删除 Agent
 
 ### 对话管理 (Conversations)
-- `GET /api/v1/conversations` - 获取对话列表
-- `POST /api/v1/conversations` - 创建对话
-- `GET /api/v1/conversations/{id}` - 获取对话详情
-- `DELETE /api/v1/conversations/{id}` - 删除对话
+- `GET /api/conversations` - 获取对话列表
+- `POST /api/conversations` - 创建对话
+- `GET /api/conversations/{id}` - 获取对话详情
+- `DELETE /api/conversations/{id}` - 删除对话
 
 ### 消息管理 (Messages)
-- `GET /api/v1/conversations/{id}/messages` - 获取消息列表
-- `POST /api/v1/conversations/{id}/messages` - 发送消息
+- `GET /api/conversations/{id}/messages` - 获取消息列表
+- `POST /api/conversations/{id}/messages` - 发送消息
 
 ### Coze 集成 (Coze)
-- `GET /api/v1/coze/token` - 获取 Coze 访问令牌
+- `GET /api/coze/token` - 获取 Coze 访问令牌
 
 ## 🔐 认证说明
 

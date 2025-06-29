@@ -28,7 +28,7 @@ type CreateAgentRequest struct {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 401 {object} utils.Response
-// @Router /agents [post]
+// @Router /api/agents [post]
 func CreateAgent(c *gin.Context) {
 	userID := c.GetUint("user_id")
 
@@ -68,7 +68,7 @@ func CreateAgent(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /agents/{id} [get]
+// @Router /api/agents/{id} [get]
 func GetAgent(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -98,7 +98,7 @@ func GetAgent(c *gin.Context) {
 // @Param size query int false "每页数量" default(10)
 // @Success 200 {object} utils.PageResponse
 // @Failure 401 {object} utils.Response
-// @Router /agents [get]
+// @Router /api/agents [get]
 func ListAgents(c *gin.Context) {
 	userID := c.GetUint("user_id")
 
@@ -135,7 +135,7 @@ func ListAgents(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /agents/{id} [put]
+// @Router /api/agents/{id} [put]
 func UpdateAgent(c *gin.Context) {
 	userID := c.GetUint("user_id")
 	idStr := c.Param("id")
@@ -190,7 +190,7 @@ func UpdateAgent(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /agents/{id} [delete]
+// @Router /api/agents/{id} [delete]
 func DeleteAgent(c *gin.Context) {
 	userID := c.GetUint("user_id")
 	idStr := c.Param("id")

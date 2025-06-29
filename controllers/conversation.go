@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"coze-agent-platform/utils"
+	"coze-agent-platform/utils/coze"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +27,7 @@ type SendMessageRequest struct {
 // @Param size query int false "每页数量" default(10)
 // @Success 200 {object} utils.PageResponse
 // @Failure 401 {object} utils.Response
-// @Router /conversations [get]
+// @Router /api/conversations [get]
 func ListConversations(c *gin.Context) {
 	utils.Success(c, []interface{}{})
 }
@@ -42,9 +43,19 @@ func ListConversations(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 401 {object} utils.Response
-// @Router /conversations [post]
+// @Router /api/conversations [post]
 func CreateConversation(c *gin.Context) {
-	utils.SuccessWithMessage(c, "功能开发中", nil)
+	cozeConv, err := coze.NewConversation()
+	if err != nil {
+		utils.BadRequest(c, err.Error())
+		return
+	}
+	id, err := cozeConv.CreateConversation()
+	if err != nil {
+		utils.BadRequest(c, err.Error())
+		return
+	}
+	utils.Success(c, id)
 }
 
 // GetConversation 获取对话详情
@@ -58,7 +69,7 @@ func CreateConversation(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /conversations/{id} [get]
+// @Router /api/conversations/{id} [get]
 func GetConversation(c *gin.Context) {
 	utils.SuccessWithMessage(c, "功能开发中", nil)
 }
@@ -74,7 +85,7 @@ func GetConversation(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /conversations/{id} [delete]
+// @Router /api/conversations/{id} [delete]
 func DeleteConversation(c *gin.Context) {
 	utils.SuccessWithMessage(c, "功能开发中", nil)
 }
@@ -92,7 +103,7 @@ func DeleteConversation(c *gin.Context) {
 // @Success 200 {object} utils.PageResponse
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /conversations/{id}/messages [get]
+// @Router /api/conversations/{id}/messages [get]
 func GetMessages(c *gin.Context) {
 	utils.Success(c, []interface{}{})
 }
@@ -109,7 +120,19 @@ func GetMessages(c *gin.Context) {
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
 // @Failure 404 {object} utils.Response
-// @Router /conversations/{id}/messages [post]
+// @Router /api/conversations/{id}/messages [post]
 func SendMessage(c *gin.Context) {
-	utils.SuccessWithMessage(c, "功能开发中", nil)
+	conversationID := c.Param("id")
+	content := c.PostForm("content")
+	cozeConv, err := coze.NewConversation()
+	if err != nil {
+		utils.BadRequest(c, err.Error())
+		return
+	}
+	msgs,err := cozeConv.SendMessage(conversationID, content)
+	if err != nil {
+		utils.BadRequest(c, err.Error())
+		return
+	}
+	utils.Success(c,msgs)
 }

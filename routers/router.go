@@ -2,14 +2,13 @@ package routers
 
 import (
 	"coze-agent-platform/controllers"
-	"coze-agent-platform/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
 	// API路由组
-	api := r.Group("/api/v1")
+	api := r.Group("/api")
 
 	// 公开路由（无需认证）
 	public := api.Group("/")
@@ -22,7 +21,7 @@ func SetupRoutes(r *gin.Engine) {
 
 	// 需要认证的路由
 	auth := api.Group("/")
-	auth.Use(middleware.JWTAuth())
+	// auth.Use(middleware.JWTAuth())
 	{
 		// 用户相关
 		auth.GET("/users/profile", controllers.GetUserProfile)

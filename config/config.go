@@ -53,6 +53,7 @@ type CozeConfig struct {
 	PublicKeyID        string `mapstructure:"public_key_id"`
 	PrivateKey         string `mapstructure:"private_key"`
 	PrivateKeyFilePath string `mapstructure:"private_key_file_path"`
+	BotID              string `mapstructure:"bot_id"`
 }
 
 var Cfg *Config

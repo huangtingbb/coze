@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/agents": {
+        "/api/agents": {
             "get": {
                 "security": [
                     {
@@ -123,7 +123,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/agents/{id}": {
+        "/api/agents/{id}": {
             "get": {
                 "security": [
                     {
@@ -275,7 +275,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/login": {
+        "/api/auth/login": {
             "post": {
                 "description": "用户登录获取JWT token",
                 "consumes": [
@@ -333,7 +333,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/register": {
+        "/api/auth/register": {
             "post": {
                 "description": "用户注册新账户",
                 "consumes": [
@@ -385,7 +385,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/conversations": {
+        "/api/conversations": {
             "get": {
                 "security": [
                     {
@@ -484,7 +484,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/conversations/{id}": {
+        "/api/conversations/{id}": {
             "get": {
                 "security": [
                     {
@@ -580,7 +580,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/conversations/{id}/messages": {
+        "/api/conversations/{id}/messages": {
             "get": {
                 "security": [
                     {
@@ -699,7 +699,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/coze/token": {
+        "/api/coze/token": {
             "get": {
                 "description": "获取Coze API的访问令牌",
                 "consumes": [
@@ -728,7 +728,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/profile": {
+        "/api/users/profile": {
             "get": {
                 "security": [
                     {
@@ -1002,7 +1002,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "/api/v1",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Coze Agent Platform API",
 	Description:      "基于Gin框架的Coze Agent中台微服务系统",

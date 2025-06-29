@@ -37,7 +37,7 @@ type AuthResponse struct {
 // @Success 200 {object} utils.Response{data=AuthResponse}
 // @Failure 400 {object} utils.Response
 // @Failure 401 {object} utils.Response
-// @Router /auth/login [post]
+// @Router /api/auth/login [post]
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -80,7 +80,7 @@ func Login(c *gin.Context) {
 // @Param request body RegisterRequest true "注册信息"
 // @Success 200 {object} utils.Response{data=AuthResponse}
 // @Failure 400 {object} utils.Response
-// @Router /auth/register [post]
+// @Router /api/auth/register [post]
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

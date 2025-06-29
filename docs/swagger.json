@@ -16,9 +16,9 @@
         "version": "1.0"
     },
     "host": "localhost:8080",
-    "basePath": "/api/v1",
+    "basePath": "/",
     "paths": {
-        "/agents": {
+        "/api/agents": {
             "get": {
                 "security": [
                     {
@@ -117,7 +117,7 @@
                 }
             }
         },
-        "/agents/{id}": {
+        "/api/agents/{id}": {
             "get": {
                 "security": [
                     {
@@ -269,7 +269,7 @@
                 }
             }
         },
-        "/auth/login": {
+        "/api/auth/login": {
             "post": {
                 "description": "用户登录获取JWT token",
                 "consumes": [
@@ -327,7 +327,7 @@
                 }
             }
         },
-        "/auth/register": {
+        "/api/auth/register": {
             "post": {
                 "description": "用户注册新账户",
                 "consumes": [
@@ -379,7 +379,7 @@
                 }
             }
         },
-        "/conversations": {
+        "/api/conversations": {
             "get": {
                 "security": [
                     {
@@ -478,7 +478,7 @@
                 }
             }
         },
-        "/conversations/{id}": {
+        "/api/conversations/{id}": {
             "get": {
                 "security": [
                     {
@@ -574,7 +574,7 @@
                 }
             }
         },
-        "/conversations/{id}/messages": {
+        "/api/conversations/{id}/messages": {
             "get": {
                 "security": [
                     {
@@ -693,7 +693,7 @@
                 }
             }
         },
-        "/coze/token": {
+        "/api/coze/token": {
             "get": {
                 "description": "获取Coze API的访问令牌",
                 "consumes": [
@@ -722,7 +722,7 @@
                 }
             }
         },
-        "/users/profile": {
+        "/api/users/profile": {
             "get": {
                 "security": [
                     {

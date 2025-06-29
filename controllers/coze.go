@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Success 200 {object} utils.Response
 // @Failure 400 {object} utils.Response
-// @Router /coze/token [get]
+// @Router /api/coze/token [get]
 func GetCozeToken(c *gin.Context) {
 	token, err := coze.GetToken()
 	if err != nil {
