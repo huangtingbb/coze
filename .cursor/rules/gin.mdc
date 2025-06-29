@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+创建一个基于 Gin 框架的Coze Agent 的中台微服务系统，要求：
+
+1. **核心框架**
+   - 使用 Gin 实现 RESTful API
+   - 采用分层架构：router -> controller -> service -> model
+   - 实现 JWT 身份验证中间件
+   - 添加 Swagger 文档支持
+
+2. **数据存储**
+   - MySQL 8.0：
+     - 使用 GORM 作为 ORM
+   - Redis：
+   - Milvus：
+
+3. **消息队列**
+   - Kafka：
+
+4. **搜索服务**
+   - ElasticSearch：
+
+5. **系统要求**
+   - 配置文件使用环境变量注入
+   - 错误统一处理中间件
+   - 结构化日志记录（JSON 格式）
+   - 实现健康检查端点 /health
+
+6.**Coze 集成规范**
+   - 使用 Coze 官方 SDK 实现双向通信
+
+

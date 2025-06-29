@@ -1,0 +1,59 @@
+app:
+  name: "coze-agent-platform"
+  port: "8080"
+  mode: "debug" # debug, release
+
+database:
+  host: "localhost"
+  port: 3306
+  username: "root"
+  password: "root"
+  dbname: "coze"
+
+redis:
+  host: "localhost"
+  port: 6379
+  password: "102914"
+  db: 0
+
+jwt:
+  secret: "coze-agent-secret-key-change-in-production"
+  expire: 7200 # seconds (2 hours)
+
+log:
+  level: "info" # debug, info, warn, error
+  format: "json" # json, text 
+
+coze:
+  api_url: "https://api.coze.cn"
+  client_id: "1122938180388"
+  private_key: "-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCgZHBEvYTd8X8J
+QpD6AuxPifKGDcnnwg7wyzI9YtESLd+tNO9EmRUNXdb7a75x10To80Fxo1IlG265
+vRPX80NQBoqxaUIMIPOh4HFSpHyWgzxbWgZcVBIecsZ1rhZAfo11Sjj2DZOmANUX
+KzB7biLy5mAHej9stYU+sjqFdHypnRWodrCTc68KrMkqMoJg8PDDQy8L9Md+HNeP
+pqsftlZo0NgJw6MPB393M7c4NAHhvubxcG9MXUwCBC7vTeYLS3SOrM3GdUpQ+65c
+hrYqt2tMI6Iu8YXfG92q24vjIwKbSVj/Bmi25zNxx6RkWpMd2SyTDDPPRBptzPQf
+5jIU4HO/AgMBAAECggEAEsrBxqQH0bMuRaj5cHlwM39/nUo3SkKX2omMKNoPkdgz
+GUmW8QwYhdjlS87bYN4ucjayB7zxbmyQ5A0tqoMTc2hYzqF8/gvMT76KuHqSKFZW
+94MMNLwa5VtgOkB71fGd5EyecOG1V2FIli7WvtdwG9J3FNkzXirEYkyig6law8p2
+q1EeHCSf/KEmcdPGB8GAREj/2kzGU4Ez2e3klmg+0NC7xfyOGa5DRlZDRKUOpVx/
+zXESziavLDbyHV9S5hOqwU4W0Dmd5rAi3/XDIOvbTpsYeEOZo9OtZDzOobufyplV
+RVrF+37aOop+kAvKIkv0xYBJONeYP19CvkkNv74mqQKBgQDcxOTGt9IhDZtzm3C+
+9O0IH0gzgriNJzmiqP/qm9pW2IIADPIXDf1BqhC0H135A0EBOFnLpDx/wrYXgiSw
+RRbLv0xZH6Qh8ViZ8fJdLzBlHniTrzcEpMwGjmKWilDzsEPRfiQzewynPsuLcZth
+t06xtSWeigRBSj7vkjkSwOfc1wKBgQC5/PcivmJayWcujP/QRgG9rDCWo8UAGh/s
+XaIVeL8AeoCIpehD3Y3m5c6XlD/UNidxEaBkK5IgN5D1027ZE3w6n3B0cOzs86op
+kTc+POQEnNfYoF2sVrCvbEgNnfV24YP93sztBwP7SoPnYx+sJ6z3vhv4KzvYLFKn
+ABJw5pYbWQKBgQCmSdhYphUsuGcjCS4/Z5UyzP1Bb3E7QRR0pP8+4+3uBF7HUvj2
+zJ66WzMBua665eyM0rkwXqEDStKFmo2wCBpHlewYJXEn7/Zg3pFEB0tYnz8LXqr+
+YHMdbRptcfnP1DEBFxaFgGXjg7Ulb4kubThlOqD/bc4Or7IAGg/LRGphOQKBgDmQ
+bf0258Ipq+HgihywTkGiVbeKIKMTcuX5ZP04TgWb5MRmdSjsHctlPTf1Dnxj9nks
+d3QJeES4bgln01skiMKsLmYbvXjpQbVz2KFOv1QeJ0BJAjUg77ab0QFF7n9I9U1R
+9CM4lKbmPUUUjOz/qq1TDd0VpIQX080UXKDM/ZChAoGBAICWNH8d/7TKsX1mJY4K
+D3+semp+MlQEHQ3h4zikJgOu65CPvmL0gMEcwYZPTrtLFm+iG5bPOXDbIKK4ShIu
+YjNbUBW0BSFI4wocHLj6c4F1p958sSJo6vMMJQA6PiIEn3wWl4Qc0OOa1I8tT1W3
+Hh/8pkpsi4gIq+RHKvS3sqbP
+-----END PRIVATE KEY-----"
+  private_key_file_path: "C:/study/coze/config/private_key.pem"
+  public_key_id: "gbdyFvWh6aMIOxysqMGgEIXjEAvBxWCWp-Nt8QsMptQ"
