@@ -43,5 +43,6 @@ func SetupRoutes(r *gin.Engine) {
 		// 消息相关
 		auth.GET("/conversations/:id/messages", controllers.GetMessages)
 		auth.POST("/conversations/:id/messages", controllers.SendMessage)
+		auth.POST("/conversations/:id/messages/stream", controllers.SendMessageStream)
 	}
 }

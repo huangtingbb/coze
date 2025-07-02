@@ -557,6 +557,43 @@ paths:
       summary: 发送消息
       tags:
       - 消息
+  /api/conversations/{id}/messages/stream:
+    post:
+      consumes:
+      - application/json
+      description: 向指定对话发送消息，使用 SSE 协议返回流式响应
+      parameters:
+      - description: 对话ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 消息内容
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.SendMessageRequest'
+      produces:
+      - text/event-stream
+      responses:
+        "200":
+          description: SSE 流式响应
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 发送消息(流式)
+      tags:
+      - 消息
   /api/coze/token:
     get:
       consumes:

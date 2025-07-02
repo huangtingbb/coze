@@ -3,6 +3,8 @@ package controllers
 import (
 	"coze-agent-platform/utils"
 	"coze-agent-platform/utils/coze"
+	"encoding/json"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -123,16 +125,101 @@ func GetMessages(c *gin.Context) {
 // @Router /api/conversations/{id}/messages [post]
 func SendMessage(c *gin.Context) {
 	conversationID := c.Param("id")
-	content := c.PostForm("content")
+	var req SendMessageRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequest(c, "参数格式错误: "+err.Error())
+		return
+	}
+
 	cozeConv, err := coze.NewConversation()
 	if err != nil {
 		utils.BadRequest(c, err.Error())
 		return
 	}
-	msgs,err := cozeConv.SendMessage(conversationID, content)
+	msgs, err := cozeConv.SendMessage(conversationID, req.Content)
 	if err != nil {
 		utils.BadRequest(c, err.Error())
 		return
 	}
-	utils.Success(c,msgs)
+	utils.Success(c, msgs)
+}
+
+// SendMessageStream 发送消息(流式)
+// @Summary 发送消息(流式)
+// @Description 向指定对话发送消息，使用 SSE 协议返回流式响应
+// @Tags 消息
+// @Accept json
+// @Produce text/event-stream
+// @Security ApiKeyAuth
+// @Param id path string true "对话ID"
+// @Param request body SendMessageRequest true "消息内容"
+// @Success 200 {string} string "SSE 流式响应"
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Router /api/conversations/{id}/messages/stream [post]
+func SendMessageStream(c *gin.Context) {
+	conversationID := c.Param("id")
+	var req SendMessageRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequest(c, "参数格式错误: "+err.Error())
+		return
+	}
+
+	// 设置 SSE 头部
+	c.Header("Content-Type", "text/event-stream")
+	c.Header("Cache-Control", "no-cache")
+	c.Header("Connection", "keep-alive")
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Headers", "Cache-Control")
+
+	// 检查客户端是否断开连接
+	clientGone := c.Request.Context().Done()
+
+	cozeConv, err := coze.NewConversation()
+	if err != nil {
+		// SSE 错误格式
+		c.Writer.WriteString(fmt.Sprintf("data: %s\n\n",
+			mustMarshalJSON(map[string]interface{}{
+				"error":   true,
+				"message": err.Error(),
+			})))
+		c.Writer.Flush()
+		return
+	}
+
+	// 定义流式回调函数
+	onMessage := func(eventType string, data interface{}) {
+		select {
+		case <-clientGone:
+			return // 客户端已断开连接
+		default:
+			eventData := map[string]interface{}{
+				"type": eventType,
+				"data": data,
+			}
+			c.Writer.WriteString(fmt.Sprintf("data: %s\n\n", mustMarshalJSON(eventData)))
+			c.Writer.Flush()
+		}
+	}
+
+	// 发送开始事件
+	onMessage("start", map[string]string{"conversation_id": conversationID})
+
+	err = cozeConv.SendMessageStreamWithCallback(conversationID, req.Content, onMessage)
+	if err != nil {
+		onMessage("error", map[string]string{"message": err.Error()})
+		return
+	}
+
+	// 发送结束事件
+	onMessage("end", map[string]string{"status": "completed"})
+}
+
+// 辅助函数：安全地将对象转换为 JSON
+func mustMarshalJSON(v interface{}) string {
+	data, err := json.Marshal(v)
+	if err != nil {
+		return `{"error": "序列化失败"}`
+	}
+	return string(data)
 }
