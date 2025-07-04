@@ -30,7 +30,7 @@ type CreateAgentRequest struct {
 // @Failure 401 {object} utils.Response
 // @Router /api/agents [post]
 func CreateAgent(c *gin.Context) {
-	userID := c.GetUint("user_id")
+	userId := c.GetUint("user_id")
 
 	var req CreateAgentRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -45,7 +45,7 @@ func CreateAgent(c *gin.Context) {
 		Prompt:      req.Prompt,
 		Config:      req.Config,
 		Status:      1,
-		UserID:      userID,
+		UserID:      userId,
 	}
 
 	agentService := services.NewAgentService()
@@ -100,7 +100,7 @@ func GetAgent(c *gin.Context) {
 // @Failure 401 {object} utils.Response
 // @Router /api/agents [get]
 func ListAgents(c *gin.Context) {
-	userID := c.GetUint("user_id")
+	userId := c.GetUint("user_id")
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	size, _ := strconv.Atoi(c.DefaultQuery("size", "10"))
@@ -115,7 +115,7 @@ func ListAgents(c *gin.Context) {
 	// 过滤当前用户的Agent
 	var userAgents []*models.Agent
 	for _, agent := range agents {
-		if agent.UserID == userID {
+		if agent.UserID == userId {
 			userAgents = append(userAgents, agent)
 		}
 	}
@@ -137,7 +137,7 @@ func ListAgents(c *gin.Context) {
 // @Failure 404 {object} utils.Response
 // @Router /api/agents/{id} [put]
 func UpdateAgent(c *gin.Context) {
-	userID := c.GetUint("user_id")
+	userId := c.GetUint("user_id")
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
@@ -159,7 +159,7 @@ func UpdateAgent(c *gin.Context) {
 	}
 
 	// 检查权限
-	if agent.UserID != userID {
+	if agent.UserID != userId {
 		utils.Unauthorized(c, "无权限操作")
 		return
 	}
@@ -192,7 +192,7 @@ func UpdateAgent(c *gin.Context) {
 // @Failure 404 {object} utils.Response
 // @Router /api/agents/{id} [delete]
 func DeleteAgent(c *gin.Context) {
-	userID := c.GetUint("user_id")
+	userId := c.GetUint("user_id")
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
@@ -208,7 +208,7 @@ func DeleteAgent(c *gin.Context) {
 	}
 
 	// 检查权限
-	if agent.UserID != userID {
+	if agent.UserID != userId {
 		utils.Unauthorized(c, "无权限操作")
 		return
 	}

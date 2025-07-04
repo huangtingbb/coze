@@ -1,0 +1,43 @@
+{
+    "recommendations": [
+        "golang.go",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode.makefile-tools",
+        "humao.rest-client",
+        "ms-vscode.vscode-docker",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "formulahendry.auto-rename-tag",
+        "ms-vscode.live-server",
+        "gruntfuggly.todo-tree",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.vscode-eslint",
+        "ms-vscode.remote-containers",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-docker-ext",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "ms-vscode.hexeditor",
+        "formulahendry.code-runner",
+        "vscode-icons-team.vscode-icons",
+        "ms-vscode.powershell",
+        "ms-vscode.remote-wsl",
+        "ms-vscode.remote-ssh",
+        "ms-vscode.remote-ssh-edit",
+        "ms-vscode.remote-explorer",
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer",
+        "ms-vscode.vscode-github-issue-notebooks",
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-vscode.vscode-json-schema",
+        "ms-vscode.vscode-yaml-schema",
+        "ms-vscode.vscode-toml"
+    ],
+    "unwantedRecommendations": [
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "ms-vscode.vscode-javascript-debugger"
+    ]
+}

@@ -18,10 +18,10 @@ import (
 // @Failure 401 {object} utils.Response
 // @Router /api/users/profile [get]
 func GetUserProfile(c *gin.Context) {
-	userID := c.GetUint("user_id")
+	userId := c.GetUint("user_id")
 
 	userService := services.NewUserService()
-	user, err := userService.GetUserByID(userID)
+	user, err := userService.GetUserByID(userId)
 	if err != nil {
 		utils.NotFound(c, "用户不存在")
 		return
@@ -48,7 +48,7 @@ type UpdateProfileRequest struct {
 // @Failure 401 {object} utils.Response
 // @Router /api/users/profile [put]
 func UpdateUserProfile(c *gin.Context) {
-	userID := c.GetUint("user_id")
+	userId := c.GetUint("user_id")
 
 	var req UpdateProfileRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -57,7 +57,7 @@ func UpdateUserProfile(c *gin.Context) {
 	}
 
 	userService := services.NewUserService()
-	user, err := userService.GetUserByID(userID)
+	user, err := userService.GetUserByID(userId)
 	if err != nil {
 		utils.NotFound(c, "用户不存在")
 		return

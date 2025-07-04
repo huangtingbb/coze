@@ -1,0 +1,81 @@
+{
+    "go.toolsManagement.checkForUpdates": "local",
+    "go.useLanguageServer": true,
+    "go.formatTool": "goimports",
+    "go.lintTool": "golangci-lint",
+    "go.lintOnSave": "workspace",
+    "go.buildOnSave": "workspace",
+    "go.testOnSave": false,
+    "go.coverOnSave": false,
+    "go.coverageDecorator": {
+        "type": "gutter",
+        "coveredHighlightColor": "rgba(64,128,128,0.5)",
+        "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+        "coveredGutterStyle": "blockblue",
+        "uncoveredGutterStyle": "blockred"
+    },
+    "go.testFlags": [
+        "-v",
+        "-race"
+    ],
+    "go.buildFlags": [
+        "-v"
+    ],
+    "go.testTimeout": "30s",
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 64,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": true,
+        "debugAdapter": "dlv-dap"
+    },
+    "go.alternateTools": {
+        "go": "go",
+        "gofmt": "gofmt",
+        "goimports": "goimports"
+    },
+    "go.gopath": "",
+    "go.goroot": "",
+    "go.inferGopath": true,
+    "go.gocodeAutoBuild": false,
+    "go.docsTool": "godoc",
+    "go.enableCodeLens": {
+        "references": true,
+        "runtest": true
+    },
+    "go.playground": {
+        "openbrowser": true,
+        "share": true
+    },
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "files.associations": {
+        "*.go": "go",
+        "go.mod": "go",
+        "go.sum": "go"
+    },
+    "search.exclude": {
+        "**/vendor/**": true,
+        "**/bin/**": true,
+        "**/logs/**": true,
+        "**/tmp/**": true
+    },
+    "files.exclude": {
+        "**/vendor/**": true,
+        "**/bin/**": true,
+        "**/logs/**": true,
+        "**/tmp/**": true
+    },
+    "go.surveys.prompt": false,
+    "go.logging.level": "info"
+}

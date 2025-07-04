@@ -31,7 +31,7 @@ func (Agent) TableName() string {
 type AgentService interface {
 	CreateAgent(agent *Agent) error
 	GetAgentByID(id uint) (*Agent, error)
-	GetAgentsByUserID(userID uint) ([]*Agent, error)
+	GetAgentsByUserID(userId uint) ([]*Agent, error)
 	UpdateAgent(agent *Agent) error
 	DeleteAgent(id uint) error
 	ListAgents(page, pageSize int) ([]*Agent, int64, error)

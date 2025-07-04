@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -77,4 +79,9 @@ func PageSuccess(c *gin.Context, data interface{}, total int64, page, size int) 
 		Page:    page,
 		Size:    size,
 	})
+}
+
+// GenerateSnowflakeId 生成简单的唯一ID
+func GenerateSnowflakeId() int64 {
+	return time.Now().UnixNano() + rand.Int63n(1000)
 }

@@ -14,9 +14,9 @@ type Claims struct {
 }
 
 // GenerateToken 生成JWT token
-func GenerateToken(userID uint, username string, secret string, expireTime int) (string, error) {
+func GenerateToken(userId uint, username string, secret string, expireTime int) (string, error) {
 	claims := Claims{
-		UserID:   userID,
+		UserID:   userId,
 		Username: username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(expireTime) * time.Second)),

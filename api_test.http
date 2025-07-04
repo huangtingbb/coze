@@ -1,0 +1,235 @@
+###
+# Coze Agent 微服务 API 测试
+# 使用 REST Client 扩展运行这些测试
+###
+
+### 变量定义
+@baseUrl = http://localhost:8080
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+### 健康检查
+GET {{baseUrl}}/health
+
+### Swagger 文档
+GET {{baseUrl}}/swagger/index.html
+
+### 用户注册
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "123456",
+    "email": "test@example.com"
+}
+
+### 用户登录
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "123456"
+}
+
+### 获取用户信息 (需要认证)
+GET {{baseUrl}}/api/users/profile
+Authorization: {{token}}
+
+### 创建 Agent
+POST {{baseUrl}}/api/agents
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "name": "测试助手",
+    "description": "这是一个测试用的智能助手",
+    "prompt": "你是一个友好的助手，帮助用户解决问题。",
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.7,
+    "max_tokens": 1000
+}
+
+### 获取所有 Agent
+GET {{baseUrl}}/api/agents
+Authorization: {{token}}
+
+### 获取指定 Agent
+GET {{baseUrl}}/api/agents/1
+Authorization: {{token}}
+
+### 更新 Agent
+PUT {{baseUrl}}/api/agents/1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "name": "更新后的测试助手",
+    "description": "这是一个更新后的测试用智能助手",
+    "prompt": "你是一个专业的助手，专门帮助用户解决技术问题。",
+    "model": "gpt-4",
+    "temperature": 0.5,
+    "max_tokens": 1500
+}
+
+### 删除 Agent
+DELETE {{baseUrl}}/api/agents/1
+Authorization: {{token}}
+
+### 创建对话
+POST {{baseUrl}}/api/conversations
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "agent_id": 1,
+    "title": "技术咨询"
+}
+
+### 获取用户的对话列表
+GET {{baseUrl}}/api/conversations
+Authorization: {{token}}
+
+### 获取指定对话
+GET {{baseUrl}}/api/conversations/1
+Authorization: {{token}}
+
+### 发送消息
+POST {{baseUrl}}/api/conversations/1/messages
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "content": "你好，我想了解一下 Go 语言的并发编程。",
+    "message_type": "user"
+}
+
+### 获取对话消息
+GET {{baseUrl}}/api/conversations/1/messages
+Authorization: {{token}}
+
+### 流式对话 (WebSocket 连接示例)
+# 注意：这需要 WebSocket 客户端支持
+# ws://localhost:8080/ws/conversations/1
+
+### Coze API 集成测试
+POST {{baseUrl}}/api/coze/chat
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "conversation_id": "conv_123",
+    "bot_id": "bot_456",
+    "user_id": "user_789",
+    "query": "请介绍一下人工智能的发展历史",
+    "chat_history": [
+        {
+            "role": "user",
+            "content": "你好"
+        },
+        {
+            "role": "assistant",
+            "content": "您好！我是您的AI助手，有什么可以帮助您的吗？"
+        }
+    ]
+}
+
+### 获取 Coze Bot 信息
+GET {{baseUrl}}/api/coze/bots/bot_456
+Authorization: {{token}}
+
+### 创建 Coze 会话
+POST {{baseUrl}}/api/coze/conversations
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "bot_id": "bot_456",
+    "user_id": "user_789"
+}
+
+### 系统状态检查
+GET {{baseUrl}}/api/system/status
+Authorization: {{token}}
+
+### 获取系统指标
+GET {{baseUrl}}/api/system/metrics
+Authorization: {{token}}
+
+### 错误测试 - 无效的 Agent ID
+GET {{baseUrl}}/api/agents/99999
+Authorization: {{token}}
+
+### 错误测试 - 无效的认证
+GET {{baseUrl}}/api/users/profile
+Authorization: Bearer invalid_token
+
+### 错误测试 - 缺少必需字段
+POST {{baseUrl}}/api/agents
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "name": "测试"
+    // 缺少 description 等必需字段
+}
+
+### 文件上传测试
+POST {{baseUrl}}/api/upload
+Authorization: {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+这是一个测试文件内容
+--boundary--
+
+### 批量操作测试
+POST {{baseUrl}}/api/agents/batch
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "action": "delete",
+    "agent_ids": [1, 2, 3]
+}
+
+### 搜索测试
+GET {{baseUrl}}/api/search?q=技术&type=agent&limit=10
+Authorization: {{token}}
+
+### 分页测试
+GET {{baseUrl}}/api/agents?page=1&limit=20&sort=created_at&order=desc
+Authorization: {{token}}
+
+### 导出数据
+GET {{baseUrl}}/api/export/conversations?format=json&start_date=2024-01-01&end_date=2024-12-31
+Authorization: {{token}}
+
+### WebHook 测试
+POST {{baseUrl}}/api/webhook/coze
+Content-Type: application/json
+X-Coze-Signature: signature_hash
+
+{
+    "event": "message.completed",
+    "data": {
+        "conversation_id": "conv_123",
+        "message_id": "msg_456",
+        "content": "这是来自 Coze 的回复",
+        "timestamp": "2024-01-15T10:30:00Z"
+    }
+}
+
+### 压力测试准备
+# 可以复制这个请求多次来测试并发性能
+POST {{baseUrl}}/api/conversations/1/messages
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "content": "测试消息 {{$randomInt}}",
+    "message_type": "user"
+}

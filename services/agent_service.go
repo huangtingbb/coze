@@ -29,9 +29,9 @@ func (s *agentService) GetAgentByID(id uint) (*models.Agent, error) {
 	return &agent, nil
 }
 
-func (s *agentService) GetAgentsByUserID(userID uint) ([]*models.Agent, error) {
+func (s *agentService) GetAgentsByUserID(userId uint) ([]*models.Agent, error) {
 	var agents []*models.Agent
-	err := models.DB.Where("user_id = ?", userID).Find(&agents).Error
+	err := models.DB.Where("user_id = ?", userId).Find(&agents).Error
 	return agents, err
 }
 

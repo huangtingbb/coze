@@ -3,10 +3,12 @@ package coze
 import (
 	"context"
 	"coze-agent-platform/config"
+	"coze-agent-platform/models"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/coze-dev/coze-go"
@@ -37,7 +39,11 @@ func NewConversation() (*Conversation, error) {
 func (conversation *Conversation) CreateConversation() (string, error) {
 	botID := conversation.Config.BotID
 	ctx := context.Background()
-	resp, err := conversation.Cli.Conversations.Create(ctx, &coze.CreateConversationsReq{BotID: botID})
+	metaData := map[string]string{
+		"user_id":   "157",
+		"user_phone": "13207171044",
+	}
+	resp, err := conversation.Cli.Conversations.Create(ctx, &coze.CreateConversationsReq{BotID: botID, MetaData: metaData})
 	if err != nil {
 		return "", fmt.Errorf("创建对话失败: %v", err)
 	}
@@ -102,21 +108,33 @@ func (conversation *Conversation) SendMessageStream(conversationID string, messa
 			fmt.Printf("流式对话事件: %s\n", event.Event)
 		}
 
-		fmt.Printf("done, log :s% \n", resp.Response().LogID())
 	}
 	return nil, nil
 }
 
 // SendMessageStreamWithCallback 发送流式消息并通过回调函数处理事件
-func (conversation *Conversation) SendMessageStreamWithCallback(conversationID string, message string, onMessage func(eventType string, data interface{})) error {
+func (conversation *Conversation) SendMessageStreamWithCallback(conversationID string, userID uint, messageList []*models.Message, onMessage func(eventType string, data interface{})) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
+	cozeMessageList := make([]*coze.Message, 0, len(messageList))
+	for _, message := range messageList {
+		var messageType coze.MessageType
+		if message.Role == "user" {
+			messageType = coze.MessageTypeQuestion
+		} else if message.Role == "assistant" {
+			messageType = coze.MessageTypeAnswer
+		}
+		cozeMessageList = append(cozeMessageList, &coze.Message{
+			Role:    coze.MessageRole(message.Role),
+			Content: message.Content,
+			Type:    messageType,
+		})
+	}
 	req := &coze.CreateChatsReq{
 		BotID:  conversation.Config.BotID,
-		UserID: "157",
-		Messages: []*coze.Message{
-			coze.BuildUserQuestionText(message, nil),
-		},
+		ConversationID: conversationID,
+		UserID: strconv.FormatUint(uint64(userID), 10),
+		Messages: cozeMessageList,
 	}
 
 	resp, err := conversation.Cli.Chat.Stream(ctx, req)
