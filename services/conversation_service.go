@@ -17,7 +17,7 @@ func NewConversationService() models.ConversationService {
 
 func (s *conversationService) CreateConversation(conversation *models.Conversation) error {
 	// 创建Coze对话
-	cozeConv, err := coze.NewConversation()
+	cozeConv, err := coze.New()
 	if err != nil {
 		return fmt.Errorf("初始化Coze对话失败: %v", err.Error())
 	}

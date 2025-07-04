@@ -44,5 +44,8 @@ func SetupRoutes(r *gin.Engine) {
 		auth.GET("/conversations/:id/messages", controllers.GetMessages)
 		auth.POST("/conversations/:id/messages", controllers.SendMessage)
 		auth.POST("/conversations/messages/stream", controllers.SendMessageStream)
+
+		// 文件上传
+		auth.POST("/common/upload/file", controllers.UploadFile)
 	}
 }

@@ -175,7 +175,7 @@ Authorization: {{token}}
 }
 
 ### 文件上传测试
-POST {{baseUrl}}/api/upload
+POST {{baseUrl}}/api/common/upload/file
 Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
@@ -183,7 +183,7 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="file"; filename="test.txt"
 Content-Type: text/plain
 
-这是一个测试文件内容
+这是一个测试文件内容，用于测试文件上传到Coze平台的功能。
 --boundary--
 
 ### 批量操作测试

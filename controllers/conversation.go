@@ -264,7 +264,7 @@ func SendMessage(c *gin.Context) {
 	}
 
 	// 发送消息到Coze
-	cozeConv, err := coze.NewConversation()
+	cozeConv, err := coze.New()
 	if err != nil {
 		utils.BadRequest(c, "初始化Coze对话失败: "+err.Error())
 		return
@@ -402,7 +402,7 @@ func SendMessageStream(c *gin.Context) {
 	// 检查客户端是否断开连接
 	clientGone := c.Request.Context().Done()
 
-	cozeConv, err := coze.NewConversation()
+	cozeConv, err := coze.New()
 	if err != nil {
 		// SSE 错误格式
 		c.SSEvent("error", map[string]interface{}{

@@ -2,48 +2,28 @@ package coze
 
 import (
 	"context"
-	"coze-agent-platform/config"
 	"coze-agent-platform/models"
 	"errors"
 	"fmt"
 	"io"
-	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/coze-dev/coze-go"
 )
 
-type Conversation struct {
-	Config *config.CozeConfig
-	Cli    *coze.CozeAPI
-}
 
-func NewConversation() (*Conversation, error) {
-	cozeConv := &Conversation{
-		Config: config.GetCozeConfig(),
-	}
-	token, err := GetToken()
-	if err != nil {
-		return nil, fmt.Errorf("获取Coze Token失败: %v", err)
-	}
-	httpClient := &http.Client{
-		Timeout: 120 * time.Second,
-	}
 
-	cozeCli := coze.NewCozeAPI(coze.NewTokenAuth(token), coze.WithBaseURL(cozeConv.Config.APIURL), coze.WithHttpClient(httpClient))
-	cozeConv.Cli = &cozeCli
-	return cozeConv, nil
-}
 
-func (conversation *Conversation) CreateConversation() (string, error) {
+
+func (conversation *Client) CreateConversation() (string, error) {
 	botID := conversation.Config.BotID
 	ctx := context.Background()
 	metaData := map[string]string{
 		"user_id":   "157",
 		"user_phone": "13207171044",
 	}
-	resp, err := conversation.Cli.Conversations.Create(ctx, &coze.CreateConversationsReq{BotID: botID, MetaData: metaData})
+	resp, err := conversation.Api.Conversations.Create(ctx, &coze.CreateConversationsReq{BotID: botID, MetaData: metaData})
 	if err != nil {
 		return "", fmt.Errorf("创建对话失败: %v", err)
 	}
@@ -51,7 +31,7 @@ func (conversation *Conversation) CreateConversation() (string, error) {
 	return resp.Conversation.ID, nil
 }
 
-func (conversation *Conversation) SendMessage(conversationID string, message string) (*coze.CreateMessageResp, error) {
+func (conversation *Client) SendMessage(conversationID string, message string) (*coze.CreateMessageResp, error) {
 	messageReq := &coze.CreateMessageReq{}
 	messageReq.ConversationID = conversationID
 	messageReq.Role = coze.MessageRoleUser
@@ -59,7 +39,7 @@ func (conversation *Conversation) SendMessage(conversationID string, message str
 		coze.NewTextMessageObject(message),
 	})
 	ctx := context.Background()
-	msgs, err := conversation.Cli.Conversations.Messages.Create(ctx, messageReq)
+	msgs, err := conversation.Api.Conversations.Messages.Create(ctx, messageReq)
 	if err != nil {
 		return nil, fmt.Errorf("发送消息失败: %v", err)
 	}
@@ -67,7 +47,7 @@ func (conversation *Conversation) SendMessage(conversationID string, message str
 	return msgs, nil
 }
 
-func (conversation *Conversation) SendMessageStream(conversationID string, message string) (*coze.CreateMessageResp, error) {
+func (conversation *Client) SendMessageStream(conversationID string, message string) (*coze.CreateMessageResp, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 	req := &coze.CreateChatsReq{
@@ -78,7 +58,7 @@ func (conversation *Conversation) SendMessageStream(conversationID string, messa
 		},
 	}
 	fmt.Println(req)
-	resp, err := conversation.Cli.Chat.Stream(ctx, req)
+	resp, err := conversation.Api.Chat.Stream(ctx, req)
 
 	if err != nil {
 		return nil, fmt.Errorf("创建流式对话失败: %v", err)
@@ -113,7 +93,7 @@ func (conversation *Conversation) SendMessageStream(conversationID string, messa
 }
 
 // SendMessageStreamWithCallback 发送流式消息并通过回调函数处理事件
-func (conversation *Conversation) SendMessageStreamWithCallback(conversationID string, userID uint, messageList []*models.Message, onMessage func(eventType string, data interface{})) error {
+func (conversation *Client) SendMessageStreamWithCallback(conversationID string, userID uint, messageList []*models.Message, onMessage func(eventType string, data interface{})) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 	cozeMessageList := make([]*coze.Message, 0, len(messageList))
@@ -137,7 +117,7 @@ func (conversation *Conversation) SendMessageStreamWithCallback(conversationID s
 		Messages: cozeMessageList,
 	}
 
-	resp, err := conversation.Cli.Chat.Stream(ctx, req)
+	resp, err := conversation.Api.Chat.Stream(ctx, req)
 	if err != nil {
 		return fmt.Errorf("创建流式对话失败: %v", err)
 	}

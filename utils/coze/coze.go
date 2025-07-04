@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"net/http"
 
 	"github.com/coze-dev/coze-go"
 )
@@ -15,6 +16,29 @@ const (
 	COZE_TOKEN_KEY       = "coze:access_token"
 	TOKEN_EXPIRE_MINUTES = 14
 )
+
+type Client struct {
+	Config *config.CozeConfig
+	Api    *coze.CozeAPI
+}
+
+func New() (*Client, error) {
+	cozeConv := &Client{
+		Config: config.GetCozeConfig(),
+	}
+	token, err := GetToken()
+	if err != nil {
+		return nil, fmt.Errorf("获取Coze Token失败: %v", err)
+	}
+	httpClient := &http.Client{
+		Timeout: 120 * time.Second,
+	}
+
+	cozeApi := coze.NewCozeAPI(coze.NewTokenAuth(token), coze.WithBaseURL(cozeConv.Config.APIURL), coze.WithHttpClient(httpClient))
+	cozeConv.Api = &cozeApi
+	return cozeConv, nil
+}
+
 
 func GetToken() (string, error) {
 	ctx := context.Background()
