@@ -12,10 +12,6 @@ import (
 	"github.com/coze-dev/coze-go"
 )
 
-
-
-
-
 func (conversation *Client) CreateConversation() (string, error) {
 	botID := conversation.Config.BotID
 	ctx := context.Background()
@@ -181,3 +177,4 @@ func (conversation *Client) SendMessageStreamWithCallback(conversationID string,
 
 	return nil
 }
+

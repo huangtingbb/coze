@@ -540,3 +540,134 @@ func mustMarshalJSON(v interface{}) string {
 	}
 	return string(data)
 }
+
+func SendMessageWorkFlow(c *gin.Context) {
+	// conversationIdStr := c.DefaultQuery("conversation_id", "0")
+	// if conversationIdStr == "" {
+	// 	conversationIdStr = "0"
+	// }
+
+	// conversationId, err := strconv.ParseUint(conversationIdStr, 10, 32)
+	// if err != nil {
+	// 	// 如果解析失败，默认为0
+	// 	conversationId = 0
+	// }
+
+	var req SendMessageRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequest(c, "参数格式错误: "+err.Error())
+		return
+	}
+
+	// userIdStr := c.DefaultQuery("user_id", "0")
+	// if userIdStr == "" {
+	// 	userIdStr = "0"
+	// }
+
+	// userID, err := strconv.ParseUint(userIdStr, 10, 32)
+	// if err != nil {
+	// 	// 如果解析失败，默认为0
+	// 	userID = 0
+	// }
+
+	cozeConv, err := coze.New()
+	if err != nil {
+		utils.BadRequest(c, "初始化Coze对话失败: "+err.Error())
+		return
+	}
+
+	resp, err := cozeConv.RunWorkflow(req.Content)
+	if err != nil {
+		utils.BadRequest(c, "工作流运行失败: "+err.Error())
+		return
+	}
+
+	utils.Success(c,resp)
+}
+
+func SendMessageWorkFlowStream(c *gin.Context) {
+	var req SendMessageRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequest(c, "参数格式错误: "+err.Error())
+		return
+	}
+
+	cozeConv, err := coze.New()
+	if err != nil {
+		utils.BadRequest(c, "初始化Coze对话失败: "+err.Error())
+		return
+	}
+
+	clientGone := c.Request.Context().Done()
+
+	var aiMessageContent strings.Builder
+	var aiMessageId string
+	var aiMessageTokens int
+
+
+	// 定义流式回调函数
+	onMessage := func(eventType string, data interface{}) {
+		select {
+		case <-clientGone:
+			return // 客户端已断开连接
+		default:
+			eventData := map[string]interface{}{
+				"type": eventType,
+				"data": data,
+			}
+
+			// 处理消息增量更新
+			if eventType == "message_delta" {
+				if msgData, ok := data.(map[string]interface{}); ok {
+					if content, ok := msgData["content"].(string); ok {
+						aiMessageContent.WriteString(content)
+					}
+				}
+			}
+
+			// 处理对话完成
+			if eventType == "chat_completed" {
+				if msgData, ok := data.(map[string]interface{}); ok {
+					if chatId, ok := msgData["chat_id"].(string); ok {
+						aiMessageId = chatId
+					}
+
+					if usage, ok := msgData["usage"].(map[string]interface{}); ok {
+						for _, token := range usage {
+							aiMessageTokens += token.(int)
+						}
+					}
+				}
+
+				// 保存AI回复消息
+				if aiMessageContent.Len() > 0 {
+					aiMessage := &models.Message{
+						CozeMessageId:  aiMessageId,
+						ConversationId: 10,
+						ModelId:        1,
+						Role:           "assistant",
+						Content:        aiMessageContent.String(),
+						Tokens:         aiMessageTokens,
+					}
+
+					if err := messageService.CreateMessage(aiMessage); err != nil {
+						// 错误处理，但不中断流式响应
+						fmt.Printf("保存AI回复失败: %v\n", err)
+					}
+				}
+			}
+
+			c.SSEvent("message", eventData)
+			c.Writer.Flush()
+		}
+	}
+
+	err = cozeConv.RunWorkflowStream(req.Content, onMessage)
+	if err != nil {
+		onMessage("workflow_error", map[string]string{"message": err.Error()})
+		return
+	}
+
+	// 发送结束事件
+	onMessage("end", map[string]string{"status": "completed"})	
+}
